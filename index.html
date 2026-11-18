@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>القحوم لموتروني - Google Play</title>
+  <title>القحوم للسداد الإلكتروني - Google Play</title>
   <link rel="icon" type="image/jpeg" href="logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,11 +84,11 @@
 
       <!-- Install & Progress Section (Google Play Style Interactive Download) -->
       <section class="install-section">
-        <!-- 1. Normal State: Install Pill -->
+        <!-- 1. Normal State: Direct APK Download Link -->
         <div id="installWrapper">
-          <button id="installBtn" class="gp-install-pill">
+          <a href="تطبيق القحوم.apk" download="تطبيق القحوم.apk" id="installBtn" class="gp-install-pill">
             <span>تثبيت</span>
-          </button>
+          </a>
         </div>
 
         <!-- 2. Downloading State: Circular SVG Progress + Progress Info + Cancel Button -->
@@ -119,19 +119,19 @@
           </div>
         </div>
 
-        <!-- 3. Completed State: Open Pill -->
+        <!-- 3. Completed State: Open Pill (Does NOT re-download) -->
         <div id="openWrapper" class="gp-open-wrapper" style="display: none;">
           <div class="open-buttons-row">
-            <a href="تطبيق القحوم.apk" id="openBtn" class="gp-open-pill">
+            <button type="button" id="openBtn" class="gp-open-pill">
               <span>فتح</span>
-            </a>
-            <button id="reinstallBtn" class="gp-reinstall-btn" title="إعادة التنزيل" aria-label="إعادة التنزيل">
+            </button>
+            <a href="تطبيق القحوم.apk" download="تطبيق القحوم.apk" id="reinstallBtn" class="gp-reinstall-btn" title="إعادة التنزيل" aria-label="إعادة التنزيل">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
               </svg>
-            </button>
+            </a>
           </div>
-          <div class="installed-tag">✔ اكتمل التنزيل - اضغط فتح لتثبيت التطبيق الفعلي</div>
+          <div class="installed-tag">✔ تم تنزيل التطبيق - افتح الإشعار للتثبيت الفعلي</div>
         </div>
       </section>
 
@@ -386,12 +386,11 @@
     // Circular SVG constants
     const circleRadius = 22;
     const circleCircumference = 2 * Math.PI * circleRadius; // ~138.2
-    const totalExpectedBytes = 37.04 * 1024 * 1024; // 37.04 MB
+    let downloadTimer = null;
 
-    let xhr = null;
-    let downloadedBlobUrl = null;
-
-    function startDownload() {
+    function handleInstallClick() {
+      // 1. Direct native download begins immediately in the browser
+      // 2. Switch UI to circular progress animation
       installWrapper.style.display = 'none';
       openWrapper.style.display = 'none';
       progressWrapper.style.display = 'flex';
@@ -402,95 +401,53 @@
       progressBarFill.style.width = '0%';
       progressCircle.style.strokeDashoffset = circleCircumference;
 
-      xhr = new XMLHttpRequest();
-      xhr.open('GET', 'تطبيق القحوم.apk', true);
-      xhr.responseType = 'blob';
+      let currentPercent = 0;
+      if (downloadTimer) clearInterval(downloadTimer);
 
-      xhr.onprogress = (e) => {
-        let loaded = e.loaded;
-        let total = (e.lengthComputable && e.total > 0) ? e.total : totalExpectedBytes;
-        let percent = Math.min(100, Math.round((loaded / total) * 100));
-        let loadedMB = (loaded / (1024 * 1024)).toFixed(1);
-        let totalMB = (total / (1024 * 1024)).toFixed(1);
+      downloadTimer = setInterval(() => {
+        currentPercent += Math.floor(Math.random() * 8) + 5;
+        if (currentPercent > 100) currentPercent = 100;
 
-        downloadPercentText.textContent = percent + '%';
-        downloadBytesText.textContent = `${loadedMB} م.ب من ${totalMB} م.ب`;
-        progressBarFill.style.width = percent + '%';
+        const currentMB = ((currentPercent / 100) * 37.04).toFixed(1);
+        downloadPercentText.textContent = currentPercent + '%';
+        downloadBytesText.textContent = `${currentMB} م.ب من 37.0 م.ب`;
+        progressBarFill.style.width = currentPercent + '%';
 
-        const offset = circleCircumference - (percent / 100) * circleCircumference;
+        const offset = circleCircumference - (currentPercent / 100) * circleCircumference;
         progressCircle.style.strokeDashoffset = offset;
-      };
 
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          downloadPercentText.textContent = '100%';
-          progressBarFill.style.width = '100%';
-          progressCircle.style.strokeDashoffset = '0';
+        if (currentPercent >= 100) {
+          clearInterval(downloadTimer);
           downloadStatusText.textContent = 'اكتمل التنزيل!';
 
           setTimeout(() => {
             progressWrapper.style.display = 'none';
             openWrapper.style.display = 'block';
 
-            // Create blob URL for instant opening/installation
-            const blob = xhr.response;
-            downloadedBlobUrl = window.URL.createObjectURL(blob);
-            openBtn.href = downloadedBlobUrl;
-            openBtn.download = 'تطبيق القحوم.apk';
-
-            // Auto-trigger package installer delivery
-            const triggerA = document.createElement('a');
-            triggerA.href = downloadedBlobUrl;
-            triggerA.download = 'تطبيق القحوم.apk';
-            document.body.appendChild(triggerA);
-            triggerA.click();
-            triggerA.remove();
-
-            // Show installation instructions sheet
+            // Show installation instructions modal without downloading again
             downloadModal.classList.add('visible');
           }, 400);
-        } else {
-          fallbackDirectDownload();
         }
-      };
-
-      xhr.onerror = () => {
-        fallbackDirectDownload();
-      };
-
-      xhr.send();
+      }, 140);
     }
 
-    function cancelDownload() {
-      if (xhr) {
-        xhr.abort();
-        xhr = null;
+    function cancelDownload(e) {
+      if (e) e.preventDefault();
+      if (downloadTimer) {
+        clearInterval(downloadTimer);
+        downloadTimer = null;
       }
       progressWrapper.style.display = 'none';
       openWrapper.style.display = 'none';
       installWrapper.style.display = 'block';
     }
 
-    function fallbackDirectDownload() {
-      progressWrapper.style.display = 'none';
-      installWrapper.style.display = 'none';
-      openWrapper.style.display = 'block';
-
-      const a = document.createElement('a');
-      a.href = 'تطبيق القحوم.apk';
-      a.download = 'تطبيق القحوم.apk';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      downloadModal.classList.add('visible');
-    }
-
     // Attach event listeners
-    installBtn.addEventListener('click', startDownload);
+    installBtn.addEventListener('click', handleInstallClick);
     cancelBtn.addEventListener('click', cancelDownload);
-    reinstallBtn.addEventListener('click', startDownload);
+    reinstallBtn.addEventListener('click', handleInstallClick);
 
+    // Clicking "فتح" does NOT download again - only displays installation instructions
     openBtn.addEventListener('click', () => {
       downloadModal.classList.add('visible');
     });

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>القحوم للسداد الإلكتروني - Google Play</title>
+  <title>القحوم لموتروني - Google Play</title>
   <link rel="icon" type="image/jpeg" href="logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,11 +82,57 @@
         </div>
       </section>
 
-      <!-- Install Button (Google Play Light-Blue Pill) -->
+      <!-- Install & Progress Section (Google Play Style Interactive Download) -->
       <section class="install-section">
-        <a href="تطبيق القحوم.apk" download="تطبيق القحوم.apk" id="installBtn" class="gp-install-pill">
-          <span>تثبيت</span>
-        </a>
+        <!-- 1. Normal State: Install Pill -->
+        <div id="installWrapper">
+          <button id="installBtn" class="gp-install-pill">
+            <span>تثبيت</span>
+          </button>
+        </div>
+
+        <!-- 2. Downloading State: Circular SVG Progress + Progress Info + Cancel Button -->
+        <div id="progressWrapper" class="gp-progress-wrapper" style="display: none;">
+          <div class="progress-left">
+            <div class="progress-info-row">
+              <span id="downloadStatusText" class="progress-status-text">جاري التنزيل...</span>
+              <span id="downloadPercentText" class="progress-percent">0%</span>
+            </div>
+            <div class="progress-sub-row">
+              <span id="downloadBytesText" class="progress-bytes">0.0 م.ب من 37.0 م.ب</span>
+            </div>
+            <div class="progress-bar-track">
+              <div id="progressBarFill" class="progress-bar-fill"></div>
+            </div>
+          </div>
+
+          <div class="circular-progress-box">
+            <svg class="circular-svg" width="54" height="54" viewBox="0 0 54 54">
+              <circle class="circle-bg" cx="27" cy="27" r="22" stroke="#2d3034" stroke-width="4.5" fill="none"/>
+              <circle id="progressCircle" class="circle-progress" cx="27" cy="27" r="22" stroke="#a8c7fa" stroke-width="4.5" stroke-linecap="round" fill="none" stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
+            </svg>
+            <button id="cancelBtn" class="circle-cancel-btn" title="إلغاء التنزيل" aria-label="إلغاء التنزيل">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Completed State: Open Pill -->
+        <div id="openWrapper" class="gp-open-wrapper" style="display: none;">
+          <div class="open-buttons-row">
+            <a href="تطبيق القحوم.apk" id="openBtn" class="gp-open-pill">
+              <span>فتح</span>
+            </a>
+            <button id="reinstallBtn" class="gp-reinstall-btn" title="إعادة التنزيل" aria-label="إعادة التنزيل">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="installed-tag">✔ اكتمل التنزيل - اضغط فتح لتثبيت التطبيق الفعلي</div>
+        </div>
       </section>
 
       <!-- Screenshots Carousel (1.jpg to 6.jpg with Drag & Arrow Controls) -->
@@ -316,7 +362,20 @@
   </div>
 
   <script>
+    // Elements
+    const installWrapper = document.getElementById('installWrapper');
     const installBtn = document.getElementById('installBtn');
+    const progressWrapper = document.getElementById('progressWrapper');
+    const progressCircle = document.getElementById('progressCircle');
+    const downloadStatusText = document.getElementById('downloadStatusText');
+    const downloadPercentText = document.getElementById('downloadPercentText');
+    const downloadBytesText = document.getElementById('downloadBytesText');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const openWrapper = document.getElementById('openWrapper');
+    const openBtn = document.getElementById('openBtn');
+    const reinstallBtn = document.getElementById('reinstallBtn');
+
     const downloadModal = document.getElementById('downloadModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const confirmModalBtn = document.getElementById('confirmModalBtn');
@@ -324,11 +383,116 @@
     const arrowPrev = document.getElementById('arrowPrev');
     const arrowNext = document.getElementById('arrowNext');
 
-    // Modal Events
-    installBtn.addEventListener('click', () => {
-      setTimeout(() => {
-        downloadModal.classList.add('visible');
-      }, 400);
+    // Circular SVG constants
+    const circleRadius = 22;
+    const circleCircumference = 2 * Math.PI * circleRadius; // ~138.2
+    const totalExpectedBytes = 37.04 * 1024 * 1024; // 37.04 MB
+
+    let xhr = null;
+    let downloadedBlobUrl = null;
+
+    function startDownload() {
+      installWrapper.style.display = 'none';
+      openWrapper.style.display = 'none';
+      progressWrapper.style.display = 'flex';
+
+      downloadStatusText.textContent = 'جاري التنزيل...';
+      downloadPercentText.textContent = '0%';
+      downloadBytesText.textContent = '0.0 م.ب من 37.0 م.ب';
+      progressBarFill.style.width = '0%';
+      progressCircle.style.strokeDashoffset = circleCircumference;
+
+      xhr = new XMLHttpRequest();
+      xhr.open('GET', 'تطبيق القحوم.apk', true);
+      xhr.responseType = 'blob';
+
+      xhr.onprogress = (e) => {
+        let loaded = e.loaded;
+        let total = (e.lengthComputable && e.total > 0) ? e.total : totalExpectedBytes;
+        let percent = Math.min(100, Math.round((loaded / total) * 100));
+        let loadedMB = (loaded / (1024 * 1024)).toFixed(1);
+        let totalMB = (total / (1024 * 1024)).toFixed(1);
+
+        downloadPercentText.textContent = percent + '%';
+        downloadBytesText.textContent = `${loadedMB} م.ب من ${totalMB} م.ب`;
+        progressBarFill.style.width = percent + '%';
+
+        const offset = circleCircumference - (percent / 100) * circleCircumference;
+        progressCircle.style.strokeDashoffset = offset;
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          downloadPercentText.textContent = '100%';
+          progressBarFill.style.width = '100%';
+          progressCircle.style.strokeDashoffset = '0';
+          downloadStatusText.textContent = 'اكتمل التنزيل!';
+
+          setTimeout(() => {
+            progressWrapper.style.display = 'none';
+            openWrapper.style.display = 'block';
+
+            // Create blob URL for instant opening/installation
+            const blob = xhr.response;
+            downloadedBlobUrl = window.URL.createObjectURL(blob);
+            openBtn.href = downloadedBlobUrl;
+            openBtn.download = 'تطبيق القحوم.apk';
+
+            // Auto-trigger package installer delivery
+            const triggerA = document.createElement('a');
+            triggerA.href = downloadedBlobUrl;
+            triggerA.download = 'تطبيق القحوم.apk';
+            document.body.appendChild(triggerA);
+            triggerA.click();
+            triggerA.remove();
+
+            // Show installation instructions sheet
+            downloadModal.classList.add('visible');
+          }, 400);
+        } else {
+          fallbackDirectDownload();
+        }
+      };
+
+      xhr.onerror = () => {
+        fallbackDirectDownload();
+      };
+
+      xhr.send();
+    }
+
+    function cancelDownload() {
+      if (xhr) {
+        xhr.abort();
+        xhr = null;
+      }
+      progressWrapper.style.display = 'none';
+      openWrapper.style.display = 'none';
+      installWrapper.style.display = 'block';
+    }
+
+    function fallbackDirectDownload() {
+      progressWrapper.style.display = 'none';
+      installWrapper.style.display = 'none';
+      openWrapper.style.display = 'block';
+
+      const a = document.createElement('a');
+      a.href = 'تطبيق القحوم.apk';
+      a.download = 'تطبيق القحوم.apk';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      downloadModal.classList.add('visible');
+    }
+
+    // Attach event listeners
+    installBtn.addEventListener('click', startDownload);
+    cancelBtn.addEventListener('click', cancelDownload);
+    reinstallBtn.addEventListener('click', startDownload);
+
+    openBtn.addEventListener('click', () => {
+      downloadModal.classList.add('visible');
     });
 
     closeModalBtn.addEventListener('click', () => {

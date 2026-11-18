@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>القحوم للسداد الإلكتروني - Google Play</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Google+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- App Wrapper (Mobile Google Play Shell) -->
+  <div class="gp-mobile-shell">
+
+    <!-- Top Action Bar (Clean - Back Arrow Only) -->
+    <header class="gp-top-bar">
+      <div class="top-bar-right">
+        <button class="top-btn" aria-label="رجوع">
+          <!-- Back arrow for RTL (pointing right) -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" transform="rotate(180 12 12)" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Scrollable Content -->
+    <main class="gp-content">
+
+      <!-- App Header Section (Logo on RIGHT, Title on LEFT) -->
+      <section class="app-header-section">
+        <div class="app-icon-box">
+          <img src="logo.jpg" alt="شعار القحوم للسداد" class="app-logo-img">
+        </div>
+        <div class="app-header-info">
+          <h1 class="app-title">القحوم للسداد الإلكتروني</h1>
+          <a href="#" class="app-dev-link">Al-Qahoum Telecom</a>
+        </div>
+      </section>
+
+      <!-- App Metrics Row (Exact Google Play Metrics) -->
+      <section class="metrics-row">
+        <!-- Rating -->
+        <div class="metric-item">
+          <div class="metric-val">
+            <span>4.8</span>
+            <span class="star-glyph">★</span>
+          </div>
+          <div class="metric-label">12 ألف مراجعة</div>
+        </div>
+
+        <div class="metric-divider"></div>
+
+        <!-- Content Rating (3+) -->
+        <div class="metric-item">
+          <div class="metric-val">
+            <span class="badge-age">3+</span>
+          </div>
+          <div class="metric-label">
+            <span>مناسب لـ 3 أعوام وفوق</span>
+            <span class="info-glyph">ⓘ</span>
+          </div>
+        </div>
+
+        <div class="metric-divider"></div>
+
+        <!-- Download Size -->
+        <div class="metric-item">
+          <div class="metric-val">
+            <svg class="download-glyph" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+          </div>
+          <div class="metric-label">37 م.ب</div>
+        </div>
+      </section>
+
+      <!-- Install Button (Google Play Light-Blue Pill) -->
+      <section class="install-section">
+        <a href="تطبيق القحوم.apk" download="تطبيق القحوم.apk" id="installBtn" class="gp-install-pill">
+          <span>تثبيت</span>
+        </a>
+      </section>
+
+      <!-- Screenshots Carousel (1.jpg to 6.jpg with Drag & Arrow Controls) -->
+      <section class="screenshots-section">
+        <div class="carousel-container">
+          <button class="carousel-arrow prev" id="arrowPrev" aria-label="السابق">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+            </svg>
+          </button>
+
+          <div class="screenshots-carousel" id="carousel">
+            <div class="shot-wrapper">
+              <img src="1.jpg" alt="لقطة شاشة 1" class="shot-img" draggable="false" loading="eager">
+            </div>
+            <div class="shot-wrapper">
+              <img src="2.jpg" alt="لقطة شاشة 2" class="shot-img" draggable="false" loading="lazy">
+            </div>
+            <div class="shot-wrapper">
+              <img src="3.jpg" alt="لقطة شاشة 3" class="shot-img" draggable="false" loading="lazy">
+            </div>
+            <div class="shot-wrapper">
+              <img src="4.jpg" alt="لقطة شاشة 4" class="shot-img" draggable="false" loading="lazy">
+            </div>
+            <div class="shot-wrapper">
+              <img src="5.jpg" alt="لقطة شاشة 5" class="shot-img" draggable="false" loading="lazy">
+            </div>
+            <div class="shot-wrapper">
+              <img src="6.jpg" alt="لقطة شاشة 6" class="shot-img" draggable="false" loading="lazy">
+            </div>
+          </div>
+
+          <button class="carousel-arrow next" id="arrowNext" aria-label="التالي">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- "About this app" Section (لمحة عن هذا التطبيق) -->
+      <section class="about-section">
+        <div class="about-header">
+          <h2 class="about-title">مع القحوم اصبحت المدفوعات أكثر سهولة</h2>
+          <button class="about-arrow-btn" aria-label="عرض التفاصيل">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <p class="about-tagline">تطبيق القحوم للسداد والخدمات المالية المباشرة الأقرب إليك</p>
+
+        <!-- Ranking Chip -->
+        <div class="ranking-chip">
+          <span>الترتيب رقم 1 في أهم التطبيقات المجانية للفئة شؤون مالية</span>
+        </div>
+
+        <!-- Highlights Chips -->
+        <div class="features-chips">
+          <span class="feat-chip">سداد فوري 24/7</span>
+          <span class="feat-chip">يمن موبايل • سبأفون • يو • واي</span>
+          <span class="feat-chip">كروت شبكات الواي فاي</span>
+          <span class="feat-chip">تأمين بالبصمة</span>
+          <span class="feat-chip">سندات PDF معتمدة</span>
+        </div>
+      </section>
+
+      <!-- Ratings & Reviews Section (Exact Match to Image 3) -->
+      <section class="reviews-section">
+        <div class="about-header">
+          <h2 class="about-title">التقييمات والمراجعات</h2>
+          <button class="about-arrow-btn" aria-label="عرض كل التقييمات">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="reviews-container">
+          <!-- Review Card 1 (Tawfiq Al-Bushairi - Exact from Screenshot) -->
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-user">
+                <div class="rc-avatar">ت</div>
+                <div class="rc-name">توفيق البشيري</div>
+              </div>
+              <button class="rc-more-btn" aria-label="خيارات">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="rc-meta-row">
+              <div class="rc-stars">★★★★★</div>
+              <span class="rc-date">2026/11/5</span>
+              <span class="rc-pill">قبل أسبوع واحد</span>
+            </div>
+
+            <p class="rc-text">
+              ما شاء الله تطبيق ممتاز جداً وسريع بالسداد، تسديد الرصيد وشحن باقات يمن موبايل ويو وسبأفون يتم بلحظات وبدون أي تأخير، وسندات العمليات دقيقة وموثوقة، أنصح به بشدة.
+            </p>
+
+            <div class="rc-footer">
+              <span class="rc-helpful-txt">هل كانت هذه المراجعة مفيدة؟</span>
+              <div class="rc-actions">
+                <button class="rc-btn-helpful" aria-label="مفيدة">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                  </svg>
+                  <span>21</span>
+                </button>
+                <button class="rc-btn-helpful" aria-label="غير مفيدة">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.37-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review Card 2 -->
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-user">
+                <div class="rc-avatar rc-avatar-green">ع</div>
+                <div class="rc-name">علي القحوم</div>
+              </div>
+              <button class="rc-more-btn" aria-label="خيارات">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="rc-meta-row">
+              <div class="rc-stars">★★★★★</div>
+              <span class="rc-date">2026/11/12</span>
+              <span class="rc-pill">قبل 4 أيام</span>
+            </div>
+
+            <p class="rc-text">
+              أفضل تطبيق لتسديد الرصيد وشحن الباقات، واجهة واضحة وسهلة جداً والتسديد فوري على مدار 24 ساعة، والسندات تصدر بلحظتها. يستاهل خمس نجوم بجدارة.
+            </p>
+
+            <div class="rc-footer">
+              <span class="rc-helpful-txt">هل كانت هذه المراجعة مفيدة؟</span>
+              <div class="rc-actions">
+                <button class="rc-btn-helpful" aria-label="مفيدة">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                  </svg>
+                  <span>14</span>
+                </button>
+                <button class="rc-btn-helpful" aria-label="غير مفيدة">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.37-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data Safety Teaser -->
+      <section class="data-safety-section">
+        <div class="about-header">
+          <h2 class="about-title">أمان البيانات</h2>
+          <button class="about-arrow-btn" aria-label="عرض أمان البيانات">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+        </div>
+        <p class="data-safety-p">
+          يبدأ الحفاظ على أمان بياناتك بفهم الآلية التي يتبعها مطوِّرو التطبيقات لجمع بياناتك ومشاركتها. تشمل الممارسات
+          تشفير البيانات واستخدام بروتوكولات آمنة ومصادقة بيومترية.
+        </p>
+      </section>
+    </main>
+
+    <!-- Download Instruction Dialog (Modal) -->
+    <div class="download-modal-overlay" id="downloadModal">
+      <div class="download-modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-top-row">
+          <div class="m-app-mini">
+            <img src="logo.jpg" alt="لوجو القحوم" class="mini-logo">
+            <div>
+              <div class="mini-title">تطبيق القحوم للسداد</div>
+              <div class="mini-sub">بدأ تنزيل ملف التثبيت (37 م.ب)...</div>
+            </div>
+          </div>
+          <button class="m-close-btn" id="closeModalBtn">&times;</button>
+        </div>
+
+        <div class="modal-guide-steps">
+          <div class="g-step">
+            <div class="g-num">1</div>
+            <div class="g-text">
+              <strong>افتح إشعار التنزيل</strong>
+              <span>انقر على الملف فور اكتمال التنزيل من شريط الإشعارات.</span>
+            </div>
+          </div>
+          <div class="g-step">
+            <div class="g-num">2</div>
+            <div class="g-text">
+              <strong>السماح بالتثبيت</strong>
+              <span>إذا ظهر تنبيه الأمان، فعّل خيار <em>"السماح بتثبيت التطبيقات من هذا المصدر"</em>.</span>
+            </div>
+          </div>
+          <div class="g-step">
+            <div class="g-num">3</div>
+            <div class="g-text">
+              <strong>اضغط تثبيت</strong>
+              <span>سيتم تثبيت التطبيق ويظهر مباشرة في شاشة هاتفك وقائمتك.</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="modal-ok-btn" id="confirmModalBtn">حسناً، تم</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const installBtn = document.getElementById('installBtn');
+    const downloadModal = document.getElementById('downloadModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const confirmModalBtn = document.getElementById('confirmModalBtn');
+    const carousel = document.getElementById('carousel');
+    const arrowPrev = document.getElementById('arrowPrev');
+    const arrowNext = document.getElementById('arrowNext');
+
+    // Modal Events
+    installBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        downloadModal.classList.add('visible');
+      }, 400);
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      downloadModal.classList.remove('visible');
+    });
+
+    confirmModalBtn.addEventListener('click', () => {
+      downloadModal.classList.remove('visible');
+    });
+
+    downloadModal.addEventListener('click', (e) => {
+      if (e.target === downloadModal) {
+        downloadModal.classList.remove('visible');
+      }
+    });
+
+    // Carousel Drag-to-Scroll (Desktop mouse + mobile touch)
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    carousel.addEventListener('mousedown', (e) => {
+      isDown = true;
+      carousel.classList.add('grabbing');
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        carousel.classList.remove('grabbing');
+      }
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      if (isDown) {
+        isDown = false;
+        carousel.classList.remove('grabbing');
+      }
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.6; // Speed multiplier
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Arrow Buttons Navigation
+    const scrollStep = 222; // width of shot (210) + gap (12)
+    arrowNext.addEventListener('click', () => {
+      carousel.scrollBy({ left: -scrollStep, behavior: 'smooth' }); // in RTL, left is negative
+    });
+
+    arrowPrev.addEventListener('click', () => {
+      carousel.scrollBy({ left: scrollStep, behavior: 'smooth' });
+    });
+  </script>
+</body>
+
+</html>

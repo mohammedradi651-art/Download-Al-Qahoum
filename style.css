@@ -116,7 +116,7 @@ html, body {
 /* ----------------- Scrollable Main Content ----------------- */
 .gp-content {
   flex: 1;
-  padding: 10px 18px 24px;
+  padding: 16px 18px 24px;
 }
 
 /* ----------------- App Header (Icon on Right, Titles on Left) ----------------- */
